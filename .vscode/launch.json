@@ -5,13 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Pacman Debug",
+      "name": "Debug",
       "type": "debugpy",
       "request": "launch",
-      "program": "pacman.py",
-      "cwd": "${workspaceFolder}/Project 2",
+      "program": "ok",
+      "cwd": "${workspaceFolder}/cats",
       "console": "integratedTerminal",
-      "args": "-p MinimaxAgent -l smallClassic "
+      "args": "-q 10"
     }
   ]
 }
