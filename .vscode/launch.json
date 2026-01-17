@@ -9,9 +9,9 @@
       "type": "debugpy",
       "request": "launch",
       "program": "ok",
-      "cwd": "${workspaceFolder}/cats",
+      "cwd": "${workspaceFolder}/lab05",
       "console": "integratedTerminal",
-      "args": "-q 10"
+      "args": "-q prune_leaves"
     }
   ]
 }
