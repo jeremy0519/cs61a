@@ -8,10 +8,10 @@
       "name": "Debug",
       "type": "debugpy",
       "request": "launch",
-      "program": "ok",
-      "cwd": "${workspaceFolder}/lab05",
+      "program": "hw06.py",
+      "cwd": "${workspaceFolder}/hw06",
       "console": "integratedTerminal",
-      "args": "-q prune_leaves"
+      "args": "-m doctest"
     }
   ]
 }
