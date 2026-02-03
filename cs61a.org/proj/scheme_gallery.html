@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="Computer Science, Programming, Berkeley, EECS" />
+    <meta name="author" content ="John DeNero, Kay Ousterhout" />
+    <!-- CHANGED CAREFUL -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../assets/js/hl.js"></script>
+    <script src="../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/mono-blue.css">
+    <link rel="icon" href="../assets/images/favicon.ico">
+
+    
+
+<link href="../assets/css/project.css" rel="stylesheet" type="text/css">
+<style>
+  img {
+    max-height:500px;
+  }
+</style>
+
+
+    <title>
+Scheme Art Gallery | CS 61A Fall 2025
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section" aria-label="Toggle Navigation Bar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">
+            CS 61A
+            <!-- <img style="max-width:60px; margin-top: -20px;" class="logo" src="/assets/images/logo.png"/> -->
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+
+            
+            <li><a href="../index.html">Lectures</a></li>
+            
+            <li><a href="../articles/about-61a/index.html">Syllabus</a></li>
+            
+            <li><a href="https://edstem.org/us/courses/82739/discussion">Ed</a></li>
+            
+            <li><a href="../office-hours.html">Office Hours</a></li>
+            
+            <li><a href="../articles/contact-61a/index.html">Contact</a></li>
+            
+
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="scheme_gallery.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+                
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                
+                <li><a href="https://www.pensieve.co/student/classes/cs61a_fa25/">Pensieve</a></li>
+                
+                <li><a href="https://sections.cs61a.org">Add/Change Sections</a></li>
+                
+                <li><a href="https://bcourses.berkeley.edu/courses/1547573/pages">Lecture Recordings</a></li>
+                
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                
+                <li><a href="https://code.cs61a.org/">Code Editors</a></li>
+                
+              </ul>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="scheme_gallery.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                <li><a href="../resources.html">Past Exams & Websites</a></li>
+                
+                <li><a href="https://www.composingprograms.com">Textbook</a></li>
+                
+                <li><a href="../articles/campus-res/index.html">Campus Resources</a></li>
+                
+                <li><a href="../articles/advice/index.html">Advice from Students</a></li>
+                
+                <li><a href="../articles/scheme-spec/index.html">Scheme Specifications</a></li>
+                
+                <li><a href="../articles/scheme-builtins/index.html">Scheme Built-In Procedures</a></li>
+                
+              </ul>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="scheme_gallery.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Guides
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                <li><a href="https://drive.google.com/file/d/1O72u0ml65pibcjz-PXKpqeJDKaVqQ3D8/view">Debugging Guide</a></li>
+                
+                <li><a href="../articles/studying/index.html">Studying Guide</a></li>
+                
+                <li><a href="../articles/type-hints.html">Type Hints</a></li>
+                
+                <li><a href="../articles/composition/index.html">Composition Guide</a></li>
+                
+                <li><a href="../assets/pdfs/61a-mt1-study-guide.pdf">MT1 Study Guide</a></li>
+                
+                <li><a href="../assets/pdfs/61a-mt2-study-guide.pdf">MT2 Study Guide</a></li>
+                
+                <li><a href="../assets/pdfs/61a-final-study-guide.pdf">Final Study Guide</a></li>
+                
+              </ul>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="scheme_gallery.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                <li><a href="../instructor.html">Instructors</a></li>
+                
+                <li><a href="../staff.html">TAs & Tutors</a></li>
+                
+                <li><a href="../academic-interns.html">Academic Interns</a></li>
+                
+              </ul>
+            </li>
+            
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Scheme Art Gallery
+
+        
+        
+        
+      </h1>
+    </header>
+    
+<div class="haiku">
+  <blockquote><cite>
+The output is art,<br>
+But what about its source code?<br>
+It's just as abstract.
+
+</cite></blockquote>
+</div>
+
+    
+<p>For credit, all you need to do is appreciate the art. There's nothing to turn in.</p>
+
+<!--
+Please vote for your favorite entry in this semester's CS 61A Scheme Art
+Contest by submitting this <a href="https://forms.gle/muc5UxEgg3k9ajg36">form</a>.
+
+-->
+
+
+<h1 id="featherweight-division">Featherweight Division</h1>
+
+
+
+<h2 id="pineappeo-amp-shroomiet">Pineappeo &amp; Shroomiet</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/0c697c93/artwork.png">
+  <blockquote>The autograder may return 0 out of 20,<br>But love always returns True.<br>Kay and John can't slice us apart.</blockquote>
+  <p>Tokens: 512</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/0c697c93/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="six-seven-3d">Six Seven (3D)</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/0cc04d13/artwork.png">
+  <blockquote>How many lines did <br>it take to code this drawing?<br>You know the answer.</blockquote>
+  <p>Tokens: 194</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/0cc04d13/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="nightmare">Nightmare</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/11384444/artwork.png">
+  <blockquote>Three strikes every term,<br>Grades are yours alone to earn,<br>So get up and learn!</blockquote>
+  <p>Tokens: 507</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/11384444/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="the-quantum-bloom">The Quantum Bloom</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/1ff7e20c/artwork.png">
+  <blockquote>Just want to finish an assignment</blockquote>
+  <p>Tokens: 235</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/1ff7e20c/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="the-hungry-caterpillar">The Hungry Caterpillar</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/2b33b79f/artwork.png">
+  <blockquote>Hungry Scheming Caterpillar<br>Eats apples one, two, then three-<br>Stops before its caught over 512 tokens</blockquote>
+  <p>Tokens: 505</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/2b33b79f/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="bay-area-transportation">Bay Area Transportation</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/32ce82ab/artwork.png">
+  <blockquote>Bay be wildin' out:<br>    freeways, stroads, buses, and trains<br>    in 4-fractal star.</blockquote>
+  <p>Tokens: 167</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/32ce82ab/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="ready-set-julia">Ready, set, Julia!</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/42410446/artwork.png">
+  <blockquote>Fueled by caffeine and ADHD meds,<br>At 3 AM I coded, it failed, I coded, it failed, on and on until it worked;<br>Recursion!</blockquote>
+  <p>Tokens: 505</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/42410446/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="digital-cipher-tiling">Digital Cipher Tiling</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/521150ec/artwork.png">
+  <blockquote>Deep Squares Unfold Now, <br>Cyan Borders Hold A Dark Code, <br>You Can See It Now, <br>Live Alongside The Blue Light</blockquote>
+  <p>Tokens: 399</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/521150ec/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="poop-party">poop party</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/563810d3/artwork.png">
+  <blockquote>This is my favorite food🥰</blockquote>
+  <p>Tokens: 552</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/563810d3/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="doot-doot">Doot Doot</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/56b26cda/artwork.png">
+  <blockquote>The way that switch brrt<br>Six-Seven I just bipped right<br>on the highway Skrrt</blockquote>
+  <p>Tokens: 505</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/56b26cda/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="drax-standing-still">Drax standing still</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/5e59eaee/artwork.png">
+  <blockquote>Drax has mastered<br>the art of standing so still<br>he is invisible.</blockquote>
+  <p>Tokens: 18</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/5e59eaee/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="6-7">6 7</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/5f9be366/artwork.png">
+  <blockquote>6 7</blockquote>
+  <p>Tokens: 469</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/5f9be366/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="cosmic-orbit">Cosmic Orbit</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/6f4db709/artwork.png">
+  <blockquote>Circles spin around<br>As a sun begins to glow<br>The cosmic orbit forms. </blockquote>
+  <p>Tokens: 123</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/6f4db709/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="mm_pp_m_"><code>MM_PP_M_</code></h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/70bbd620/artwork.png">
+  <blockquote>Nightmares fill my mind.<br>Mushrooms. Pineapple. Pizza.<br>Please, just let it end</blockquote>
+  <p>Tokens: 345</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/70bbd620/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="mandelbrot-set">Mandelbrot Set</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/70ea1abe/artwork.png">
+  <blockquote>This is so poorly<br>coded it takes twenty three<br>minutes to finish.</blockquote>
+  <p>Tokens: 465</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/70ea1abe/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="the-gears-of-hypnosis">The Gears of Hypnosis</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/9448b977/artwork.png">
+  <blockquote>Watch the wheels turn and spin,<br>Colors dance and pull you in,<br>You can't look away.</blockquote>
+  <p>Tokens: 430</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/9448b977/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="unlimited-void">Unlimited Void</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/ba2e810a/artwork.png">
+  <blockquote>naught but emptiness,<br>yet everything all at once. <br>shoutout to my goat</blockquote>
+  <p>Tokens: 253</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/ba2e810a/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="snowy-boy">snowy boy</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/ba4fa289/artwork.png">
+  <blockquote>if melted = false:<br>he's a jolly happy soul<br>else: no more frosty</blockquote>
+  <p>Tokens: 414</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/ba4fa289/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="6-7-2">6-7</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/c0a30563/artwork.png">
+  <blockquote>Six and seven sit<br>brainrot enters CS class<br>numbers bring joy</blockquote>
+  <p>Tokens: 105</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/c0a30563/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="pokemon-or-something-idk-i-don-t-play-pokemon">pokemon or something (idk i don't play pokemon)</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/c64ae84a/artwork.png">
+  <blockquote> my mom once told me<br>"i heard you like pokemon"<br>(i like digimon)</blockquote>
+  <p>Tokens: 387</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/c64ae84a/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="snake-game">Snake Game</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/d1610518/artwork.png">
+  <blockquote>Never ending game<br>Busy growing the blue snake<br>Yes, I am in class</blockquote>
+  <p>Tokens: 511</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/d1610518/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="fuzzy-cozy-christmas">Fuzzy Cozy Christmas</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/d2a328a8/artwork.png">
+  <blockquote>Can't retreat<br>From the sweet treats<br>That joyfully entice!</blockquote>
+  <p>Tokens: 510</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/d2a328a8/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="black-dragon-curve">Black Dragon Curve</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/e88d0a23/artwork.png">
+  <blockquote>Scheme programming sucks<br>Fractals are cool to look at<br>Fractals over Scheme</blockquote>
+  <p>Tokens: 111</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/e88d0a23/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="iterative-mandelbrot">Iterative Mandelbrot</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/fb70b081/artwork.png">
+  <blockquote>Falling, falling cause<br>there's an open door. Calling,<br>calling, I'm wanting more.</blockquote>
+  <p>Tokens: 511</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/fb70b081/contest.scm", target="__blank">View Code</a>
+
+
+<h1 id="heavyweight-division">Heavyweight Division</h1>
+
+
+
+<h2 id="semicolon-john-denero-made-using-code-containing-semicolon-john-denero">Semicolon John Denero Made Using Code Containing Semicolon John Denero</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/1fe25955/artwork.png">
+  <blockquote>But which one came first?<br>Was it the picture or code?<br>The answer's unclear...</blockquote>
+  <p>Tokens: 1548</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/1fe25955/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="hee-hee-hah-hah">Hee Hee Hah Hah</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/4da57137/artwork.png">
+  <blockquote>Tiny troops collide,<br>A goblin cries mid-chaos-<br>Victory sparkles</blockquote>
+  <p>Tokens: 1471</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/4da57137/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="oh-mighty-john-the-father-of-composing-programs">Oh, Mighty John… The Father of Composing Programs...</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/68c3eec6/artwork.png">
+  <blockquote>Father of programs,<br>With his beloved six, seven—<br>Louvre must make him room.</blockquote>
+  <p>Tokens: 3589</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/68c3eec6/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="stud-ants-and-some-bs">(Stud)Ants and some Bs!</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/6bbb965f/artwork.png">
+  <blockquote>To B or not to B?<br>That is the question.<br>The midterm stung us enough.</blockquote>
+  <p>Tokens: 1161</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/6bbb965f/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="newton-fractal">Newton Fractal</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/6dbb9616/artwork.png">
+  <blockquote>I thought that this would be easy and fun, but it took longer than the prokect</blockquote>
+  <p>Tokens: 781</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/6dbb9616/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="episode-mmxxv---the-python-s-scheme-the-sql">Episode MMXXV - The Python's Scheme (The SQL)</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/71721b43/artwork.png">
+  <blockquote>A long time ago,<br>when the end of 6 1 A<br>seemed far, far away...</blockquote>
+  <p>Tokens: 1896</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/71721b43/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="escher-s-scheme">Escher's Scheme</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/81f3f902/artwork.png">
+  <blockquote>Flying fishes drift,<br>Entangled in eternity -<br>Python was easier.</blockquote>
+  <p>Tokens: 1683</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/81f3f902/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="legend-of-zelda-is-the-best-game">Legend of Zelda is the BEST game :)</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/8c2ca4de/artwork.png">
+  <blockquote>it's reasonable that the winner of 2024 TGA award will be either Legend of Zelda:Tears of the Kingdom or Elden Ring DLC. Yeah Black Myth also got chance... What do you mean by Astro bot??!!</blockquote>
+  <p>Tokens: 2092</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/8c2ca4de/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="pixels-on-the-campanile">Pixels on the Campanile</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/add29a13/artwork.png">
+  <blockquote>big game broke my heart<br>we're still better though, no doubt<br>pixels shout "go bears!"</blockquote>
+  <p>Tokens: 2728</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/add29a13/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="6ix-7even">6ix 7even</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/d255c7d9/artwork.png">
+  <blockquote>Six Seven so nice<br>Six Seven Six Seven nice<br>Six Seven so nice</blockquote>
+  <p>Tokens: 596</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/d255c7d9/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="divine-denero-s-6-7-commandments">Divine DeNero's 6-7 Commandments</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/daea4eef/artwork.png">
+  <blockquote>Six sevens in hand,<br>Each holds six more—infinite—<br>DeNero commands.</blockquote>
+  <p>Tokens: 1163</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/daea4eef/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="fallen-leaves">Fallen Leaves</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/eb2c4191/artwork.png">
+  <blockquote>Leaves Are Everywhere<br>Aren't They Awesome? But Fall Is<br>Gone Soon, like this class : (</blockquote>
+  <p>Tokens: 910</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/eb2c4191/contest.scm", target="__blank">View Code</a>
+
+
+<h2 id="padoru">Padoru</h2>
+
+
+<div class="haiku">
+  <img class="img-responsive center-block" src="scheme_gallery/entries/f931a473/artwork.png">
+  <blockquote>Holiday menace<br>She raids my peaceful night<br>Loots my cookies too</blockquote>
+  <p>Tokens: 4012</p>
+</div>
+
+<a class="btn" href="scheme_gallery/entries/f931a473/contest.scm", target="__blank">View Code</a>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="scheme_gallery.html#featherweight-division">Featherweight Division</a></li>
+  <ul>
+    <li><a href="scheme_gallery.html#pineappeo-amp-shroomiet">Pineappeo &amp; Shroomiet</a></li>
+    <li><a href="scheme_gallery.html#six-seven-3d">Six Seven (3D)</a></li>
+    <li><a href="scheme_gallery.html#nightmare">Nightmare</a></li>
+    <li><a href="scheme_gallery.html#the-quantum-bloom">The Quantum Bloom</a></li>
+    <li><a href="scheme_gallery.html#the-hungry-caterpillar">The Hungry Caterpillar</a></li>
+    <li><a href="scheme_gallery.html#bay-area-transportation">Bay Area Transportation</a></li>
+    <li><a href="scheme_gallery.html#ready-set-julia">Ready, set, Julia!</a></li>
+    <li><a href="scheme_gallery.html#digital-cipher-tiling">Digital Cipher Tiling</a></li>
+    <li><a href="scheme_gallery.html#poop-party">poop party</a></li>
+    <li><a href="scheme_gallery.html#doot-doot">Doot Doot</a></li>
+    <li><a href="scheme_gallery.html#drax-standing-still">Drax standing still</a></li>
+    <li><a href="scheme_gallery.html#6-7">6 7</a></li>
+    <li><a href="scheme_gallery.html#cosmic-orbit">Cosmic Orbit</a></li>
+    <li><a href="scheme_gallery.html#mm_pp_m_"><code>MM_PP_M_</code></a></li>
+    <li><a href="scheme_gallery.html#mandelbrot-set">Mandelbrot Set</a></li>
+    <li><a href="scheme_gallery.html#the-gears-of-hypnosis">The Gears of Hypnosis</a></li>
+    <li><a href="scheme_gallery.html#unlimited-void">Unlimited Void</a></li>
+    <li><a href="scheme_gallery.html#snowy-boy">snowy boy</a></li>
+    <li><a href="scheme_gallery.html#6-7-2">6-7</a></li>
+    <li><a href="scheme_gallery.html#pokemon-or-something-idk-i-don-t-play-pokemon">pokemon or something (idk i don't play pokemon)</a></li>
+    <li><a href="scheme_gallery.html#snake-game">Snake Game</a></li>
+    <li><a href="scheme_gallery.html#fuzzy-cozy-christmas">Fuzzy Cozy Christmas</a></li>
+    <li><a href="scheme_gallery.html#black-dragon-curve">Black Dragon Curve</a></li>
+    <li><a href="scheme_gallery.html#iterative-mandelbrot">Iterative Mandelbrot</a></li>
+  </ul>
+  <li><a href="scheme_gallery.html#heavyweight-division">Heavyweight Division</a></li>
+  <ul>
+    <li><a href="scheme_gallery.html#semicolon-john-denero-made-using-code-containing-semicolon-john-denero">Semicolon John Denero Made Using Code Containing Semicolon John Denero</a></li>
+    <li><a href="scheme_gallery.html#hee-hee-hah-hah">Hee Hee Hah Hah</a></li>
+    <li><a href="scheme_gallery.html#oh-mighty-john-the-father-of-composing-programs">Oh, Mighty John… The Father of Composing Programs...</a></li>
+    <li><a href="scheme_gallery.html#stud-ants-and-some-bs">(Stud)Ants and some Bs!</a></li>
+    <li><a href="scheme_gallery.html#newton-fractal">Newton Fractal</a></li>
+    <li><a href="scheme_gallery.html#episode-mmxxv---the-python-s-scheme-the-sql">Episode MMXXV - The Python's Scheme (The SQL)</a></li>
+    <li><a href="scheme_gallery.html#escher-s-scheme">Escher's Scheme</a></li>
+    <li><a href="scheme_gallery.html#legend-of-zelda-is-the-best-game">Legend of Zelda is the BEST game :)</a></li>
+    <li><a href="scheme_gallery.html#pixels-on-the-campanile">Pixels on the Campanile</a></li>
+    <li><a href="scheme_gallery.html#6ix-7even">6ix 7even</a></li>
+    <li><a href="scheme_gallery.html#divine-denero-s-6-7-commandments">Divine DeNero's 6-7 Commandments</a></li>
+    <li><a href="scheme_gallery.html#fallen-leaves">Fallen Leaves</a></li>
+    <li><a href="scheme_gallery.html#padoru">Padoru</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../assets/js/network_storage.js"></script>
+    <script src="../assets/js/code_tabindex.js"></script>
+    <script src="../assets/js/storable.js"></script>
+    <script src="../assets/js/editor.js"></script>
+    <script src="../assets/js/copy-button.js"></script>
+    <script src="../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>
